@@ -22,7 +22,7 @@ describe("createBashTool integration", () => {
 
   describe("ls command", () => {
     it("ls -la lists files with details", async () => {
-      const { tools, sandbox } = await createBashTool({
+      const { tools } = await createBashTool({
         files: testFiles,
       });
 
@@ -32,12 +32,10 @@ describe("createBashTool integration", () => {
       expect(result.stdout).toContain("src");
       expect(result.stdout).toContain("package.json");
       expect(result.stdout).toContain("README.md");
-
-      await sandbox.stop();
     });
 
     it("ls lists directory contents", async () => {
-      const { tools, sandbox } = await createBashTool({
+      const { tools } = await createBashTool({
         files: testFiles,
       });
 
@@ -46,14 +44,12 @@ describe("createBashTool integration", () => {
       expect(result.exitCode).toBe(0);
       expect(result.stdout).toContain("index.ts");
       expect(result.stdout).toContain("utils");
-
-      await sandbox.stop();
     });
   });
 
   describe("find command", () => {
     it("find . -name '*.ts' finds TypeScript files", async () => {
-      const { tools, sandbox } = await createBashTool({
+      const { tools } = await createBashTool({
         files: testFiles,
       });
 
@@ -67,12 +63,10 @@ describe("createBashTool integration", () => {
       expect(result.stdout).toContain("helpers.ts");
       expect(result.stdout).toContain("format.ts");
       expect(result.stdout).not.toContain("package.json");
-
-      await sandbox.stop();
     });
 
     it("find . -name '*.json' finds JSON files", async () => {
-      const { tools, sandbox } = await createBashTool({
+      const { tools } = await createBashTool({
         files: testFiles,
       });
 
@@ -84,14 +78,12 @@ describe("createBashTool integration", () => {
       expect(result.exitCode).toBe(0);
       expect(result.stdout).toContain("package.json");
       expect(result.stdout).not.toContain("index.ts");
-
-      await sandbox.stop();
     });
   });
 
   describe("grep command", () => {
     it("grep -r 'pattern' . searches file contents", async () => {
-      const { tools, sandbox } = await createBashTool({
+      const { tools } = await createBashTool({
         files: testFiles,
       });
 
@@ -104,12 +96,10 @@ describe("createBashTool integration", () => {
       expect(result.stdout).toContain("index.ts");
       expect(result.stdout).toContain("helpers.ts");
       expect(result.stdout).toContain("format.ts");
-
-      await sandbox.stop();
     });
 
     it("grep finds specific patterns", async () => {
-      const { tools, sandbox } = await createBashTool({
+      const { tools } = await createBashTool({
         files: testFiles,
       });
 
@@ -121,14 +111,12 @@ describe("createBashTool integration", () => {
       expect(result.exitCode).toBe(0);
       expect(result.stdout).toContain("index.ts");
       expect(result.stdout).toContain("world");
-
-      await sandbox.stop();
     });
   });
 
   describe("cat command", () => {
     it("cat <file> views file contents", async () => {
-      const { tools, sandbox } = await createBashTool({
+      const { tools } = await createBashTool({
         files: testFiles,
       });
 
@@ -139,12 +127,10 @@ describe("createBashTool integration", () => {
 
       expect(result.exitCode).toBe(0);
       expect(result.stdout).toBe('export const hello = "world";');
-
-      await sandbox.stop();
     });
 
     it("cat package.json shows JSON content", async () => {
-      const { tools, sandbox } = await createBashTool({
+      const { tools } = await createBashTool({
         files: testFiles,
       });
 
@@ -156,14 +142,12 @@ describe("createBashTool integration", () => {
       expect(result.exitCode).toBe(0);
       expect(result.stdout).toContain('"name": "test-project"');
       expect(result.stdout).toContain('"version": "1.0.0"');
-
-      await sandbox.stop();
     });
   });
 
   describe("working directory", () => {
     it("pwd shows correct working directory", async () => {
-      const { tools, sandbox } = await createBashTool({
+      const { tools } = await createBashTool({
         files: testFiles,
         destination: "/workspace",
       });
@@ -172,12 +156,10 @@ describe("createBashTool integration", () => {
 
       expect(result.exitCode).toBe(0);
       expect(result.stdout.trim()).toBe("/workspace");
-
-      await sandbox.stop();
     });
 
     it("pwd shows custom destination", async () => {
-      const { tools, sandbox } = await createBashTool({
+      const { tools } = await createBashTool({
         files: testFiles,
         destination: "/home/user/project",
       });
@@ -186,14 +168,12 @@ describe("createBashTool integration", () => {
 
       expect(result.exitCode).toBe(0);
       expect(result.stdout.trim()).toBe("/home/user/project");
-
-      await sandbox.stop();
     });
   });
 
   describe("readFile tool", () => {
     it("reads file content correctly", async () => {
-      const { tools, sandbox } = await createBashTool({
+      const { tools } = await createBashTool({
         files: testFiles,
       });
 
@@ -203,14 +183,12 @@ describe("createBashTool integration", () => {
       );
 
       expect(result.content).toBe('export const hello = "world";');
-
-      await sandbox.stop();
     });
   });
 
   describe("writeFile tool", () => {
     it("writes file and can be read back", async () => {
-      const { tools, sandbox } = await createBashTool({
+      const { tools } = await createBashTool({
         files: testFiles,
       });
 
@@ -226,8 +204,6 @@ describe("createBashTool integration", () => {
 
       expect(result.exitCode).toBe(0);
       expect(result.stdout.trim()).toBe("Hello, World!");
-
-      await sandbox.stop();
     });
   });
 });

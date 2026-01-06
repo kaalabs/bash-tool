@@ -16,7 +16,7 @@ For full VM support, install `@vercel/sandbox` or another sandbox product instea
 import { createBashTool } from "bash-tool";
 import { generateText } from "ai";
 
-const { bash, tools, sandbox } = await createBashTool({
+const { bash, tools } = await createBashTool({
   files: {
     "src/index.ts": "export const hello = 'world';",
     "package.json": '{"name": "my-project"}',
@@ -36,64 +36,58 @@ const result2 = await generateText({
   tools,
   prompt: "Read the package.json file",
 });
-
-await sandbox.stop();
 ```
 
-## Options
+## Advanced Usage
+
+### Upload a local directory
 
 ```typescript
-interface CreateBashToolOptions {
-  // Directory on sandbox for files and working directory (default: "/workspace")
-  destination?: string;
-
-  // Inline files to write
-  files?: Record<string, string>;
-
-  // Upload directory from disk
-  uploadDirectory?: {
-    source: string;
-    include?: string; // glob pattern, default "**/*"
-  };
-
-  // Custom sandbox (just-bash, @vercel/sandbox, or Sandbox interface)
-  sandbox?: Sandbox | VercelSandboxInstance | JustBashInstance;
-
-  // Additional instructions for LLM
-  extraInstructions?: string;
-
-  // Callback before each tool execution
-  onCall?: (toolName: string, args: unknown) => void;
-}
+const { bash } = await createBashTool({
+  uploadDirectory: {
+    source: "./my-project",
+    include: "**/*.{ts,json}", // optional glob filter
+  },
+});
 ```
 
-## Using a custom just-bash
-
-Pass a `Bash` instance directly:
+### Use @vercel/sandbox for full VM
 
 ```typescript
-import { createBashTool } from "bash-tool";
-import { Bash } from "just-bash";
-
-const bash = new Bash({ cwd: "/workspace" });
-const { tools } = await createBashTool({ sandbox: bash });
-```
-
-## Using @vercel/sandbox
-
-Pass a sandbox instance directly:
-
-```typescript
-import { createBashTool } from "bash-tool";
 import { Sandbox } from "@vercel/sandbox";
 
 const sandbox = await Sandbox.create();
-const { tools } = await createBashTool({ sandbox });
+// Files are written to /workspace by default
+const { tools } = await createBashTool({
+  sandbox,
+  files: { "index.ts": "console.log('hello');" },
+});
 ```
 
-## Custom Sandbox
+### Use a custom just-bash instance
 
-Implement the `Sandbox` interface for other execution environments:
+```typescript
+import { Bash } from "just-bash";
+
+const sandbox = new Bash({ cwd: "/app" });
+const { tools } = await createBashTool({
+  sandbox,
+  destination: "/app",
+});
+```
+
+### Track tool calls
+
+```typescript
+const { tools } = await createBashTool({
+  files: { "index.ts": "export const x = 1;" },
+  onCall: (toolName, args) => {
+    console.log(`Tool called: ${toolName}`, args);
+  },
+});
+```
+
+### Custom sandbox implementation
 
 ```typescript
 import { createBashTool, Sandbox } from "bash-tool";
@@ -107,9 +101,6 @@ const customSandbox: Sandbox = {
   },
   async writeFile(path, content) {
     // Write file
-  },
-  async stop() {
-    // Cleanup
   },
 };
 

@@ -67,10 +67,6 @@ export async function createJustBashSandbox(
         throw new Error(`Failed to write file: ${filePath}\n${result.stderr}`);
       }
     },
-
-    async stop(): Promise<void> {
-      // just-bash has no cleanup needed
-    },
   };
 }
 
@@ -121,10 +117,6 @@ export function wrapJustBash(bashInstance: JustBashInstance): Sandbox {
       if (result.exitCode !== 0) {
         throw new Error(`Failed to write file: ${filePath}\n${result.stderr}`);
       }
-    },
-
-    async stop(): Promise<void> {
-      // just-bash has no cleanup needed
     },
   };
 }

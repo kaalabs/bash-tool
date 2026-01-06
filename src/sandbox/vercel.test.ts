@@ -103,22 +103,4 @@ describe("wrapVercelSandbox", () => {
 
     expect(mockWrite).toHaveBeenCalledWith("/test.txt", "content");
   });
-
-  it("wraps stop", async () => {
-    const mockKill = vi.fn().mockResolvedValue(undefined);
-
-    const mockVercelSandbox = {
-      shells: { spawn: vi.fn() },
-      files: {
-        read: vi.fn(),
-        write: vi.fn(),
-      },
-      kill: mockKill,
-    };
-
-    const sandbox = wrapVercelSandbox(mockVercelSandbox);
-    await sandbox.stop();
-
-    expect(mockKill).toHaveBeenCalled();
-  });
 });

@@ -93,7 +93,6 @@ describe("createBashTool", () => {
     expect(typeof sandbox.executeCommand).toBe("function");
     expect(typeof sandbox.readFile).toBe("function");
     expect(typeof sandbox.writeFile).toBe("function");
-    expect(typeof sandbox.stop).toBe("function");
   });
 
   it("writes inline files to destination", async () => {
@@ -193,11 +192,5 @@ describe("createBashTool", () => {
     // Tools should use custom sandbox
     const result = await tools.bash.execute({ command: "ls" }, opts);
     expect(result.stdout).toBe("custom");
-  });
-
-  it("stops sandbox on cleanup", async () => {
-    const { sandbox } = await createBashTool();
-    await sandbox.stop();
-    // Just verify it doesn't throw
   });
 });

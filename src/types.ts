@@ -8,7 +8,6 @@ export interface Sandbox {
   executeCommand(command: string): Promise<CommandResult>;
   readFile(path: string): Promise<string>;
   writeFile(path: string, content: string): Promise<void>;
-  stop(): Promise<void>;
 }
 
 export interface CreateBashToolOptions {

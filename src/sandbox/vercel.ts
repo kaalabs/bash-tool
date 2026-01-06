@@ -61,11 +61,5 @@ export function wrapVercelSandbox(
 
       await files.write(filePath, content);
     },
-
-    async stop(): Promise<void> {
-      if (typeof vercelSandbox.kill === "function") {
-        await vercelSandbox.kill();
-      }
-    },
   };
 }
