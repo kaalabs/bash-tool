@@ -14,27 +14,24 @@ For full VM support, install `@vercel/sandbox` or another sandbox product instea
 
 ```typescript
 import { createBashTool } from "bash-tool";
-import { generateText } from "ai";
+import { ToolLoopAgent, stepCountIs } from "ai";
 
-const { bash, tools } = await createBashTool({
+const { tools } = await createBashTool({
   files: {
     "src/index.ts": "export const hello = 'world';",
     "package.json": '{"name": "my-project"}',
   },
 });
 
-// Use just the bash tool
-const result = await generateText({
-  model: yourModel,
-  tools: { bash },
-  prompt: "Summarize the data",
-});
-
-// Or use all tools (bash, readFile, writeFile)
-const result2 = await generateText({
+const agent = new ToolLoopAgent({
   model: yourModel,
   tools,
-  prompt: "Generate a markdown table of shirt colors",
+  // Or use just the bash tool as tools: {bash: tools.bash}
+  stopWhen: stepCountIs(20),
+});
+
+const result = await agent.generate({
+  prompt: "Analyze the project and create a summary report",
 });
 ```
 

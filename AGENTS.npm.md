@@ -19,18 +19,23 @@ Instructions for AI agents using bash-tool in projects.
 
 ```typescript
 import { createBashTool } from "bash-tool";
-import { generateText } from "ai";
+import { ToolLoopAgent, stepCountIs } from "ai";
 
-const { bash, tools, sandbox } = await createBashTool({
+const { tools } = await createBashTool({
   files: {
     "src/index.ts": "export const x = 1;",
     "package.json": '{"name": "test"}',
   },
 });
 
-const result = await generateText({
+const agent = new ToolLoopAgent({
   model,
-  tools: { bash }, // or use `tools` for all three
+  tools,
+  // Or use just the bash tool as tools: {bash: tools.bash}
+  stopWhen: stepCountIs(20),
+});
+
+const result = await agent.generate({
   prompt: "List files in src/",
 });
 ```
