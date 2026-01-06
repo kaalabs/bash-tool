@@ -1,5 +1,5 @@
 {
-  "name": "@anthropic/bash-tool",
+  "name": "bash-tool",
   "publishConfig": {
     "access": "public"
   },
