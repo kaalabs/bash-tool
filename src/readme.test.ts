@@ -102,8 +102,8 @@ export interface CreateBashToolOptions {
   uploadDirectory?: { source: string; include?: string };
   sandbox?: any;
   extraInstructions?: string;
-  onBeforeBashCall?: (input: BeforeBashCallInput) => BeforeBashCallOutput | undefined | void;
-  onAfterBashCall?: (input: AfterBashCallInput) => AfterBashCallOutput | undefined | void;
+  onBeforeBashCall?: (input: BeforeBashCallInput) => BeforeBashCallOutput | void;
+  onAfterBashCall?: (input: AfterBashCallInput) => AfterBashCallOutput | void;
 }
 
 export interface BashToolkit {
