@@ -71,7 +71,7 @@ describe("wrapJustBash", () => {
     expect(content).toBe("content of /test.txt");
   });
 
-  it("wraps writeFile via fs.writeFile", async () => {
+  it("wraps writeFiles via fs.writeFile", async () => {
     const writtenFiles: Array<{ path: string; content: string }> = [];
     const mockBash = {
       exec: async () => ({ stdout: "", stderr: "", exitCode: 0 }),
@@ -84,10 +84,14 @@ describe("wrapJustBash", () => {
     };
 
     const sandbox = wrapJustBash(mockBash);
-    await sandbox.writeFile("/dir/test.txt", "my content");
+    await sandbox.writeFiles([
+      { path: "/dir/test.txt", content: "my content" },
+      { path: "/other/file.txt", content: "other content" },
+    ]);
 
     expect(writtenFiles).toEqual([
       { path: "/dir/test.txt", content: "my content" },
+      { path: "/other/file.txt", content: "other content" },
     ]);
   });
 });
@@ -121,7 +125,7 @@ describe("duck-typing disambiguation", () => {
     const customSandbox = {
       executeCommand: async () => ({ stdout: "", stderr: "", exitCode: 0 }),
       readFile: async () => "",
-      writeFile: async () => {},
+      writeFiles: async () => {},
     };
 
     expect(isJustBash(customSandbox)).toBe(false);

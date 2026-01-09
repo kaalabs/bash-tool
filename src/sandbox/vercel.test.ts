@@ -92,7 +92,7 @@ describe("wrapVercelSandbox", () => {
     );
   });
 
-  it("wraps writeFile using writeFiles with Buffer", async () => {
+  it("wraps writeFiles using native writeFiles with Buffer", async () => {
     const mockWriteFiles = vi.fn().mockResolvedValue(undefined);
 
     const mockVercelSandbox: VercelSandboxLike = {
@@ -103,10 +103,14 @@ describe("wrapVercelSandbox", () => {
     };
 
     const sandbox = wrapVercelSandbox(mockVercelSandbox);
-    await sandbox.writeFile("/test.txt", "content");
+    await sandbox.writeFiles([
+      { path: "/test.txt", content: "content" },
+      { path: "/other.txt", content: "other" },
+    ]);
 
     expect(mockWriteFiles).toHaveBeenCalledWith([
       { path: "/test.txt", content: Buffer.from("content", "utf-8") },
+      { path: "/other.txt", content: Buffer.from("other", "utf-8") },
     ]);
   });
 });

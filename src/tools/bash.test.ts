@@ -13,7 +13,7 @@ vi.mock("ai", () => ({
 const mockSandbox = {
   executeCommand: vi.fn(),
   readFile: vi.fn(),
-  writeFile: vi.fn(),
+  writeFiles: vi.fn(),
   stop: vi.fn(),
 };
 

@@ -10,7 +10,7 @@ export interface CommandResult {
 export interface Sandbox {
   executeCommand(command: string): Promise<CommandResult>;
   readFile(path: string): Promise<string>;
-  writeFile(path: string, content: string): Promise<void>;
+  writeFiles(files: Array<{ path: string; content: string }>): Promise<void>;
 }
 
 /**

@@ -79,9 +79,12 @@ export async function createBashTool(
       sandbox = options.sandbox as Sandbox;
     }
 
-    // Write files to existing sandbox
-    for (const [filePath, content] of Object.entries(filesWithDestination)) {
-      await sandbox.writeFile(filePath, content);
+    // Write files to existing sandbox in one call
+    const filesToWrite = Object.entries(filesWithDestination).map(
+      ([filePath, content]) => ({ path: filePath, content }),
+    );
+    if (filesToWrite.length > 0) {
+      await sandbox.writeFiles(filesToWrite);
     }
   } else {
     // Create just-bash sandbox with files

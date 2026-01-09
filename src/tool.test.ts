@@ -86,7 +86,7 @@ describe("createBashTool", () => {
     expect(sandbox).toBeDefined();
     expect(typeof sandbox.executeCommand).toBe("function");
     expect(typeof sandbox.readFile).toBe("function");
-    expect(typeof sandbox.writeFile).toBe("function");
+    expect(typeof sandbox.writeFiles).toBe("function");
   });
 
   it("writes inline files to destination", async () => {
@@ -295,7 +295,7 @@ describe("createBashTool", () => {
         .fn()
         .mockResolvedValue({ stdout: "custom", stderr: "", exitCode: 0 }),
       readFile: vi.fn().mockResolvedValue("custom content"),
-      writeFile: vi.fn().mockResolvedValue(undefined),
+      writeFiles: vi.fn().mockResolvedValue(undefined),
       stop: vi.fn().mockResolvedValue(undefined),
     };
 
@@ -306,11 +306,10 @@ describe("createBashTool", () => {
 
     expect(sandbox).toBe(customSandbox);
 
-    // Files should be written to custom sandbox
-    expect(customSandbox.writeFile).toHaveBeenCalledWith(
-      "/workspace/test.txt",
-      "content",
-    );
+    // Files should be written to custom sandbox in a single call
+    expect(customSandbox.writeFiles).toHaveBeenCalledWith([
+      { path: "/workspace/test.txt", content: "content" },
+    ]);
 
     // Tools should use custom sandbox
     assert(tools.bash.execute, "bash.execute should be defined");

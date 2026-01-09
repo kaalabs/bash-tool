@@ -23,7 +23,7 @@ export function createWriteFileTool(options: CreateWriteFileToolOptions) {
     inputSchema: writeFileSchema,
     execute: async ({ path, content }) => {
       const resolvedPath = nodePath.posix.resolve(cwd, path);
-      await sandbox.writeFile(resolvedPath, content);
+      await sandbox.writeFiles([{ path: resolvedPath, content }]);
       return { success: true };
     },
   });

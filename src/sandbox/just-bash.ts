@@ -63,8 +63,12 @@ export async function createJustBashSandbox(
       return bashEnv.fs.readFile(filePath);
     },
 
-    async writeFile(filePath: string, content: string): Promise<void> {
-      await bashEnv.fs.writeFile(filePath, content);
+    async writeFiles(
+      files: Array<{ path: string; content: string }>,
+    ): Promise<void> {
+      for (const file of files) {
+        await bashEnv.fs.writeFile(file.path, file.content);
+      }
     },
   };
 }
@@ -97,8 +101,12 @@ export function wrapJustBash(bashInstance: JustBashLike): Sandbox {
       return bashInstance.fs.readFile(filePath);
     },
 
-    async writeFile(filePath: string, content: string): Promise<void> {
-      await bashInstance.fs.writeFile(filePath, content);
+    async writeFiles(
+      files: Array<{ path: string; content: string }>,
+    ): Promise<void> {
+      for (const file of files) {
+        await bashInstance.fs.writeFile(file.path, file.content);
+      }
     },
   };
 }

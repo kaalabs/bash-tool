@@ -22,7 +22,7 @@ function acceptsVercelSandbox(sandbox: VercelSandbox) {
 function ourSandboxIsValid(sandbox: Sandbox) {
   sandbox.executeCommand("ls");
   sandbox.readFile("/file");
-  sandbox.writeFile("/file", "content");
+  sandbox.writeFiles([{ path: "/file", content: "content" }]);
 }
 
 // Suppress unused variable warnings

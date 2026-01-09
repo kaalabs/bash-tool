@@ -22,7 +22,7 @@ function createMockSandbox(tools: string[]): Sandbox {
       return { stdout: "", stderr: "Unknown command", exitCode: 1 };
     },
     readFile: async () => "",
-    writeFile: async () => {},
+    writeFiles: async () => {},
   };
 }
 
@@ -129,7 +129,7 @@ describe("discoverAvailableTools", () => {
         exitCode: 0,
       }),
       readFile: async () => "",
-      writeFile: async () => {},
+      writeFiles: async () => {},
     };
 
     const tools = await discoverAvailableTools(sandbox);

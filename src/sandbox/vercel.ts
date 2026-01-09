@@ -70,10 +70,15 @@ export function wrapVercelSandbox(vercelSandbox: VercelSandboxLike): Sandbox {
       return streamToString(stream);
     },
 
-    async writeFile(filePath: string, content: string): Promise<void> {
-      await vercelSandbox.writeFiles([
-        { path: filePath, content: Buffer.from(content, "utf-8") },
-      ]);
+    async writeFiles(
+      files: Array<{ path: string; content: string }>,
+    ): Promise<void> {
+      await vercelSandbox.writeFiles(
+        files.map((f) => ({
+          path: f.path,
+          content: Buffer.from(f.content, "utf-8"),
+        })),
+      );
     },
   };
 }
